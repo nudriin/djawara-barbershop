@@ -1,0 +1,20 @@
+{
+    "name": "nurdin/djawara-barbershop",
+    "description": "Djawara barbershop booking system",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Nurdin",
+            "email": "mrsunnysummer@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Nurdin\\Djawara\\" : "app/"
+        }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.6",
+        "firebase/php-jwt": "^6.10"
+    }
+}
