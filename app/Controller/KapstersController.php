@@ -7,6 +7,7 @@ use Nurdin\Djawara\Config\Database;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Helper\ErrorHelper;
 use Nurdin\Djawara\Model\Kapsters\KapstersAddRequest;
+use Nurdin\Djawara\Model\Kapsters\KapstersGetByIdRequest;
 use Nurdin\Djawara\Repository\KapstersRepository;
 use Nurdin\Djawara\Service\KapstersService;
 
@@ -59,6 +60,26 @@ class KapstersController
             http_response_code(200);
             echo json_encode([
                 'data' => $kapsters->kapsters
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
+
+    public function getById(string $id)
+    {
+        try {
+            if (!isset($id)) throw new ValidationException("Id is required", 400);
+            $request = new KapstersGetByIdRequest();
+            $request->id = $id;
+            $kapsters = $this->kapstersService->getKapstersById($request);
+            http_response_code(200);
+            echo json_encode([
+                'data' => [
+                    'name' => $kapsters->kapsters->name,
+                    'phone' => $kapsters->kapsters->phone,
+                    'profile_pic' => $kapsters->kapsters->profile_pic,
+                ]
             ]);
         } catch (Exception $e) {
             ErrorHelper::errors($e);

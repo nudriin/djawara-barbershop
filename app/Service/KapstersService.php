@@ -8,6 +8,8 @@ use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Kapsters\KapstersAddRequest;
 use Nurdin\Djawara\Model\Kapsters\KapstersAddResponse;
 use Nurdin\Djawara\Model\Kapsters\KapstersGetAllResponse;
+use Nurdin\Djawara\Model\Kapsters\KapstersGetByIdRequest;
+use Nurdin\Djawara\Model\Kapsters\KapstersGetByIdResponse;
 use Nurdin\Djawara\Repository\KapstersRepository;
 
 class KapstersService
@@ -52,12 +54,12 @@ class KapstersService
         }
     }
 
-    public function getAllKapsters() : KapstersGetAllResponse
+    public function getAllKapsters(): KapstersGetAllResponse
     {
         try {
             $kapsters = $this->kapstersRepo->findAll();
-            if($kapsters == null) {
-                throw new ValidationException("Kapsters not found", 400);
+            if ($kapsters == null) {
+                throw new ValidationException("Kapsters not found", 404);
             }
 
             $response = new KapstersGetAllResponse();
@@ -66,6 +68,31 @@ class KapstersService
             return $response;
         } catch (ValidationException $e) {
             throw $e;
+        }
+    }
+
+    public function getKapstersById(KapstersGetByIdRequest $request): KapstersGetByIdResponse
+    {
+        $this->validateGetKapstersById($request);
+        try {
+            $kapsters = $this->kapstersRepo->findById($request->id);
+            if ($kapsters == null) {
+                throw new ValidationException("Kapsters not found", 404);
+            }
+
+            $response = new KapstersGetByIdResponse();
+            $response->kapsters = $kapsters;
+
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+    }
+
+    public function validateGetKapstersById(KapstersGetByIdRequest $request)
+    {
+        if ($request->id == null || trim($request->id) == "") {
+            throw new ValidationException("Id is required", 400);
         }
     }
 }
