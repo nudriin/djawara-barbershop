@@ -52,7 +52,7 @@ class AccountController
                 $registerRequest->address = $request->address;
             }
 
-            $account = $this->accountService->register($registerRequest);
+            $account = $this->accountService->register($registerRequest, "USER");
 
             http_response_code(200);
             echo json_encode([
@@ -61,6 +61,58 @@ class AccountController
                     'email' => $account->account->email,
                     'name' => $account->account->name,
                     'phone' => $account->account->phone,
+                    'role' => $account->account->role,
+                    'address' => $account->account->address,
+                    'profile_pic' => $account->account->profile_pic,
+                ]
+            ]);
+        } catch (ValidationException $e) {
+            http_response_code($e->getCode());
+            echo json_encode([
+                'errors' => $e->getMessage()
+            ]);
+            exit();
+        }
+    }
+
+    public function adminRegister()
+    {
+        try {
+            /**
+             * php://input': Ini adalah stream wrapper khusus dalam PHP yang memungkinkan akses ke 
+             * data input permintaan HTTP raw. Dengan menggunakan 'php://input', Anda dapat 
+             * membaca data yang dikirimkan dalam body permintaan HTTP, terlepas dari tipe konten
+             * (seperti form data, JSON, XML, dll.).
+             */
+            $json = file_get_contents('php://input'); //! Ambil JSON yang dikirim oleh user
+            // Decode json tersebut agar mudah mengambil nilainya
+            $request = json_decode($json);
+
+            if (!isset($request->username) || !isset($request->email) || !isset($request->name) || !isset($request->password) || !isset($request->phone)) {
+                throw new ValidationException("username, email, name, phone and password is required", 400);
+            }
+
+            $registerRequest = new AccountRegisterRequest();
+            $registerRequest->username = $request->username;
+            $registerRequest->email = $request->email;
+            $registerRequest->name = $request->name;
+            $registerRequest->phone = $request->phone;
+            $registerRequest->password = $request->password;
+
+            if (isset($request->address)) {
+                $registerRequest->address = $request->address;
+            }
+
+            $account = $this->accountService->register($registerRequest, "ADMIN");
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => [
+                    'username' => $account->account->username,
+                    'email' => $account->account->email,
+                    'name' => $account->account->name,
+                    'phone' => $account->account->phone,
+                    'role' => $account->account->role,
                     'address' => $account->account->address,
                     'profile_pic' => $account->account->profile_pic,
                 ]
@@ -128,6 +180,7 @@ class AccountController
                     'email' => $account->account->email,
                     'name' => $account->account->name,
                     'phone' => $account->account->phone,
+                    'role' => $account->account->role,
                     'address' => $account->account->address,
                     'profile_pic' => $account->account->profile_pic,
                 ]
@@ -181,6 +234,7 @@ class AccountController
                     'email' => $account->account->email,
                     'name' => $account->account->name,
                     'phone' => $account->account->phone,
+                    'role' => $account->account->role,
                     'address' => $account->account->address,
                     'profile_pic' => $account->account->profile_pic,
                 ]
@@ -223,6 +277,7 @@ class AccountController
                     'email' => $account->account->email,
                     'name' => $account->account->name,
                     'phone' => $account->account->phone,
+                    'role' => $account->account->role,
                     'address' => $account->account->address,
                     'profile_pic' => $account->account->profile_pic,
                 ]

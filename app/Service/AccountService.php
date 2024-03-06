@@ -32,7 +32,7 @@ class AccountService
         $dotenv->load();
     }
 
-    public function register(AccountRegisterRequest $request): AccountRegisterResponse
+    public function register(AccountRegisterRequest $request, $role): AccountRegisterResponse
     {
         $this->validateRegister($request);
         try {
@@ -51,7 +51,7 @@ class AccountService
             $account->username = $request->username;
             $account->password = password_hash($request->password, PASSWORD_BCRYPT);
             $account->email = $request->email;
-            $account->role = "USER";
+            $account->role = $role;
             $account->name = $request->name;
             $account->phone = $request->phone;
             $account->address = $request->address;
