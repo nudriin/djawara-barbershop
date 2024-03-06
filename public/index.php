@@ -30,6 +30,7 @@ Router::add("POST", "/api/v1/admins/login", AccountController::class, "login");
 
 // ! KAPSTERS ROUTES
 Router::add("POST", "/api/v1/kapsters", KapstersController::class, "add", [AuthAdminMiddleware::class]);
+Router::add("GET", "/api/v1/kapsters", KapstersController::class, "getAll", [AuthAdminMiddleware::class]);
 // ! ===========
 
 

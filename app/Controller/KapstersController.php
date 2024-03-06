@@ -50,4 +50,18 @@ class KapstersController
             ErrorHelper::errors($e);
         }
     }
+
+    public function getAll()
+    {
+        try {
+            $kapsters = $this->kapstersService->getAllKapsters();
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => $kapsters->kapsters
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
 }

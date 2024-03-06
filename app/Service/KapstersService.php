@@ -7,6 +7,7 @@ use Nurdin\Djawara\Domain\Kapsters;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Kapsters\KapstersAddRequest;
 use Nurdin\Djawara\Model\Kapsters\KapstersAddResponse;
+use Nurdin\Djawara\Model\Kapsters\KapstersGetAllResponse;
 use Nurdin\Djawara\Repository\KapstersRepository;
 
 class KapstersService
@@ -48,6 +49,23 @@ class KapstersService
             trim($request->name) == "" || trim($request->phone) == "" || trim($request->profile_pic) == ""
         ) {
             throw new ValidationException("Name, phone and profile_pic is required", 400);
+        }
+    }
+
+    public function getAllKapsters() : KapstersGetAllResponse
+    {
+        try {
+            $kapsters = $this->kapstersRepo->findAll();
+            if($kapsters == null) {
+                throw new ValidationException("Kapsters not found", 400);
+            }
+
+            $response = new KapstersGetAllResponse();
+            $response->kapsters = $kapsters;
+
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
         }
     }
 }

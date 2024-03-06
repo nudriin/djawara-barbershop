@@ -39,6 +39,20 @@ class KapstersRepository
         }
     }
 
+    public function findAll() : ?array
+    {
+        $stmt = $this->connection->prepare('SELECT * FROM kapsters');
+        $stmt->execute();
+
+        if($stmt->rowCount() > 0){
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return null;
+        }
+        
+    }
+
+
     public function update(Kapsters $kapsters) : Kapsters
     {
         $stmt = $this->connection->prepare("UPDATE kapsters SET name = ?, phone = ?, profile_pic = ? WHERE id = ?");
