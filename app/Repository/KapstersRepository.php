@@ -56,7 +56,7 @@ class KapstersRepository
     public function update(Kapsters $kapsters) : Kapsters
     {
         $stmt = $this->connection->prepare("UPDATE kapsters SET name = ?, phone = ?, profile_pic = ? WHERE id = ?");
-        $stmt->execute([$kapsters->name, $kapsters->phone, $kapsters->profile_pic]);
+        $stmt->execute([$kapsters->name, $kapsters->phone, $kapsters->profile_pic, $kapsters->id]);
 
         return $kapsters;
     }

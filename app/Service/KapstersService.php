@@ -10,6 +10,8 @@ use Nurdin\Djawara\Model\Kapsters\KapstersAddResponse;
 use Nurdin\Djawara\Model\Kapsters\KapstersGetAllResponse;
 use Nurdin\Djawara\Model\Kapsters\KapstersGetByIdRequest;
 use Nurdin\Djawara\Model\Kapsters\KapstersGetByIdResponse;
+use Nurdin\Djawara\Model\Kapsters\KapstersUpdateRequest;
+use Nurdin\Djawara\Model\Kapsters\KapstersUpdateResponse;
 use Nurdin\Djawara\Repository\KapstersRepository;
 
 class KapstersService
@@ -90,6 +92,37 @@ class KapstersService
     }
 
     public function validateGetKapstersById(KapstersGetByIdRequest $request)
+    {
+        if ($request->id == null || trim($request->id) == "") {
+            throw new ValidationException("Id is required", 400);
+        }
+    }
+
+    public function updateKapsters(KapstersUpdateRequest $request): KapstersUpdateResponse
+    {
+        $this->validateUpdateKapsters($request);
+        try {
+            $kapsters = $this->kapstersRepo->findById($request->id);
+            if ($kapsters == null) {
+                throw new ValidationException("Kapsters not found", 404);
+            }
+
+            if (isset($request->name) && $kapsters->name != null) $kapsters->name = $request->name;
+            if (isset($request->phone) && $kapsters->phone != null) $kapsters->phone = $request->phone;
+            if (isset($request->profile_pic) && $kapsters->profile_pic != null) $kapsters->profile_pic = $request->profile_pic;
+
+            $this->kapstersRepo->update($kapsters);
+
+            $response = new KapstersUpdateResponse();
+            $response->kapsters = $kapsters;
+
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+    }
+
+    public function validateUpdateKapsters(KapstersUpdateRequest $request)
     {
         if ($request->id == null || trim($request->id) == "") {
             throw new ValidationException("Id is required", 400);

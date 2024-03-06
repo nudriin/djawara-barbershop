@@ -8,6 +8,7 @@ use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Helper\ErrorHelper;
 use Nurdin\Djawara\Model\Kapsters\KapstersAddRequest;
 use Nurdin\Djawara\Model\Kapsters\KapstersGetByIdRequest;
+use Nurdin\Djawara\Model\Kapsters\KapstersUpdateRequest;
 use Nurdin\Djawara\Repository\KapstersRepository;
 use Nurdin\Djawara\Service\KapstersService;
 
@@ -73,6 +74,33 @@ class KapstersController
             $request = new KapstersGetByIdRequest();
             $request->id = $id;
             $kapsters = $this->kapstersService->getKapstersById($request);
+            http_response_code(200);
+            echo json_encode([
+                'data' => [
+                    'name' => $kapsters->kapsters->name,
+                    'phone' => $kapsters->kapsters->phone,
+                    'profile_pic' => $kapsters->kapsters->profile_pic,
+                ]
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
+
+    public function update(string $id)
+    {
+        try {
+            if (!isset($id)) throw new ValidationException("Id is required", 400);
+            $json = file_get_contents('php://input');
+
+            $request = json_decode($json);                
+            $updateRequest = new KapstersUpdateRequest();
+            $updateRequest->id = $id;
+            if (isset($request->name) && $request->name != null) $updateRequest->name = $request->name;
+            if (isset($request->phone) && $request->phone != null) $updateRequest->phone = $request->phone;
+            if (isset($request->profile_pic) && $request->profile_pic != null) $updateRequest->profile_pic = $request->profile_pic;
+
+            $kapsters = $this->kapstersService->updateKapsters($updateRequest);
             http_response_code(200);
             echo json_encode([
                 'data' => [
