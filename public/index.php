@@ -33,6 +33,7 @@ Router::add("POST", "/api/v1/kapsters", KapstersController::class, "add", [AuthA
 Router::add("GET", "/api/v1/kapsters", KapstersController::class, "getAll", [AuthAdminMiddleware::class]);
 Router::add("GET", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "getById", [AuthAdminMiddleware::class]);
 Router::add("PATCH", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "update", [AuthAdminMiddleware::class]);
+Router::add("DELETE", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "remove", [AuthAdminMiddleware::class]);
 // ! ===========
 
 

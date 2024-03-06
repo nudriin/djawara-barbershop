@@ -128,4 +128,19 @@ class KapstersService
             throw new ValidationException("Id is required", 400);
         }
     }
+
+    public function removeKapsters(KapstersGetByIdRequest $request)
+    {
+        $this->validateGetKapstersById($request);
+        try {
+            $kapsters = $this->kapstersRepo->findById($request->id);
+            if($kapsters == null) {
+                throw new ValidationException("Kapsters not found", 404);
+            }
+
+            $this->kapstersRepo->remove($kapsters->id);
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+    }
 }
