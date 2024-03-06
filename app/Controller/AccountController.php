@@ -4,6 +4,7 @@ namespace Nurdin\Djawara\Controller;
 
 use Nurdin\Djawara\Config\Database;
 use Nurdin\Djawara\Exception\ValidationException;
+use Nurdin\Djawara\Helper\ErrorHelper;
 use Nurdin\Djawara\Model\Account\AccountLoginRequest;
 use Nurdin\Djawara\Model\Account\AccountPasswordRequest;
 use Nurdin\Djawara\Model\Account\AccountRegisterRequest;
@@ -67,11 +68,7 @@ class AccountController
                 ]
             ]);
         } catch (ValidationException $e) {
-            http_response_code($e->getCode());
-            echo json_encode([
-                'errors' => $e->getMessage()
-            ]);
-            exit();
+            ErrorHelper::errors($e);
         }
     }
 
@@ -118,11 +115,7 @@ class AccountController
                 ]
             ]);
         } catch (ValidationException $e) {
-            http_response_code($e->getCode());
-            echo json_encode([
-                'errors' => $e->getMessage()
-            ]);
-            exit();
+            ErrorHelper::errors($e);
         }
     }
 
@@ -149,11 +142,7 @@ class AccountController
                 ]
             ]);
         } catch (ValidationException $e) {
-            http_response_code($e->getCode());
-            echo json_encode([
-                'errors' => $e->getMessage()
-            ]);
-            exit();
+            ErrorHelper::errors($e);
         }
     }
 
@@ -186,11 +175,7 @@ class AccountController
                 ]
             ]);
         } catch (ValidationException $e) {
-            http_response_code($e->getCode());
-            echo json_encode([
-                'errors' => $e->getMessage()
-            ]);
-            exit();
+            ErrorHelper::errors($e);
         }
     }
 
@@ -240,11 +225,7 @@ class AccountController
                 ]
             ]);
         } catch (ValidationException $e) {
-            http_response_code($e->getCode());
-            echo json_encode([
-                'errors' => $e->getMessage()
-            ]);
-            exit();
+            ErrorHelper::errors($e);
         }
     }
 
@@ -283,11 +264,7 @@ class AccountController
                 ]
             ]);
         } catch (ValidationException $e) {
-            http_response_code($e->getCode());
-            echo json_encode([
-                'errors' => $e->getMessage()
-            ]);
-            exit();
+            ErrorHelper::errors($e);
         }
     }
 
@@ -309,11 +286,7 @@ class AccountController
                 'data' => 'OK'
             ]);
         } catch (ValidationException $e) {
-            http_response_code($e->getCode());
-            echo json_encode([
-                'errors' => $e->getMessage()
-            ]);
-            exit();
+            ErrorHelper::errors($e);
         }
     }
 }
