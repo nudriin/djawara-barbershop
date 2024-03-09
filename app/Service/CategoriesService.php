@@ -7,6 +7,7 @@ use Nurdin\Djawara\Domain\Categories;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Categories\CategoriesAddRequest;
 use Nurdin\Djawara\Model\Categories\CategoriesAddResponse;
+use Nurdin\Djawara\Model\Categories\CategoriesGetAllResponse;
 use Nurdin\Djawara\Model\Categories\CategoriesGetRequest;
 use Nurdin\Djawara\Model\Categories\CategoriesGetResponse;
 use Nurdin\Djawara\Repository\CategoriesRepository;
@@ -79,6 +80,23 @@ class CategoriesService
     {
         if ($request->id == null || trim($request->id) == "") {
             throw new ValidationException("Id is required", 400);
+        }
+    }
+
+    public function getAllCategories() : CategoriesGetAllResponse
+    {
+        try {
+            $categories = $this->categoriesRepo->findAll();
+            if($categories == null) {
+                throw new ValidationException("Categories not found", 404);
+            }
+
+            $response = new CategoriesGetAllResponse();
+            $response->categories = $categories;
+
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
         }
     }
 }

@@ -71,4 +71,18 @@ class CategoriesController
             ErrorHelper::errors($e);
         }
     }
+
+    public function getAll()
+    {
+        try {
+            $categories = $this->categoriesService->getAllCategories();
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => $categories->categories
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
 }
