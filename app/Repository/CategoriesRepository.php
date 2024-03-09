@@ -19,4 +19,21 @@ class CategoriesRepository
         
         return $categories;
     }
+
+    public function findById(string $id) : ?Categories
+    {
+        $stmt = $this->connection->prepare("SELECT * FROM categories WHERE id = ?");
+        $stmt->execute([$id]);
+
+        if($row = $stmt->fetch()){
+            $categories = new Categories();
+            $categories->id = $row['id'];
+            $categories->name = $row['name'];
+            $categories->price = $row['price'];
+
+            return $categories;
+        } else {
+            return null;
+        }
+    }
 }

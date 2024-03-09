@@ -39,6 +39,7 @@ Router::add("DELETE", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "r
 
 // ! CATEGORIES ROUTES
 Router::add("POST", "/api/v1/categories", CategoriesController::class, "add", [AuthAdminMiddleware::class]);
+Router::add("GET", "/api/v1/categories/([0-9]+)", CategoriesController::class, "getById", [AuthAdminMiddleware::class]);
 // ! ===========
 
 

@@ -1,0 +1,9 @@
+<?php
+namespace Nurdin\Djawara\Model\Categories;
+
+use Nurdin\Djawara\Domain\Categories;
+
+class CategoriesGetResponse
+{
+    public Categories $categories;
+}

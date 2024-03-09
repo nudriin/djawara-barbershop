@@ -7,6 +7,8 @@ use Nurdin\Djawara\Domain\Categories;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Categories\CategoriesAddRequest;
 use Nurdin\Djawara\Model\Categories\CategoriesAddResponse;
+use Nurdin\Djawara\Model\Categories\CategoriesGetRequest;
+use Nurdin\Djawara\Model\Categories\CategoriesGetResponse;
 use Nurdin\Djawara\Repository\CategoriesRepository;
 
 class CategoriesService
@@ -18,7 +20,7 @@ class CategoriesService
         $this->categoriesRepo = $categoriesRepo;
     }
 
-    public function addCategories(CategoriesAddRequest $request) : CategoriesAddResponse
+    public function addCategories(CategoriesAddRequest $request): CategoriesAddResponse
     {
         $this->validateAddCategories($request);
         try {
@@ -44,9 +46,39 @@ class CategoriesService
     {
         if (
             $request->name == null || $request->price == null ||
-            trim($request->name) == "" || trim($request->price) == "" || $request->price < 0
+            trim($request->name) == ""
         ) {
             throw new ValidationException("Name and price is required", 400);
+        }
+
+        if (trim($request->price) == "" || $request->price < 0) {
+            throw new ValidationException("Price must positive and must greater than zero", 400);
+        }
+    }
+
+    public function getCategoriesById(CategoriesGetRequest $request): CategoriesGetResponse
+    {
+        $this->validateGetCategoriesById($request);
+        try {
+            $categories = $this->categoriesRepo->findById($request->id);
+
+            if ($categories == null) {
+                throw new ValidationException("Categories not found", 404);
+            }
+
+            $response = new CategoriesGetResponse();
+            $response->categories = $categories;
+
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+    }
+
+    public function validateGetCategoriesById(CategoriesGetRequest $request)
+    {
+        if ($request->id == null || trim($request->id) == "") {
+            throw new ValidationException("Id is required", 400);
         }
     }
 }
