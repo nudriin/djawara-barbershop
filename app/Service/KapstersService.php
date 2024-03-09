@@ -102,6 +102,7 @@ class KapstersService
     {
         $this->validateUpdateKapsters($request);
         try {
+            Database::beginTransaction();
             $kapsters = $this->kapstersRepo->findById($request->id);
             if ($kapsters == null) {
                 throw new ValidationException("Kapsters not found", 404);
@@ -112,6 +113,7 @@ class KapstersService
             if (isset($request->profile_pic) && $kapsters->profile_pic != null) $kapsters->profile_pic = $request->profile_pic;
 
             $this->kapstersRepo->update($kapsters);
+            Database::commitTransaction();
 
             $response = new KapstersUpdateResponse();
             $response->kapsters = $kapsters;
@@ -119,6 +121,7 @@ class KapstersService
             return $response;
         } catch (ValidationException $e) {
             throw $e;
+            Database::rollbackTransaction();
         }
     }
 
@@ -133,13 +136,16 @@ class KapstersService
     {
         $this->validateGetKapstersById($request);
         try {
+            Database::beginTransaction();
             $kapsters = $this->kapstersRepo->findById($request->id);
             if($kapsters == null) {
                 throw new ValidationException("Kapsters not found", 404);
             }
 
             $this->kapstersRepo->remove($kapsters->id);
+            Database::commitTransaction();
         } catch (ValidationException $e) {
+            Database::rollbackTransaction();
             throw $e;
         }
     }

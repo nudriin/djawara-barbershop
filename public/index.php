@@ -41,6 +41,7 @@ Router::add("DELETE", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "r
 Router::add("POST", "/api/v1/categories", CategoriesController::class, "add", [AuthAdminMiddleware::class]);
 Router::add("GET", "/api/v1/categories/([0-9]+)", CategoriesController::class, "getById", [AuthAdminMiddleware::class]);
 Router::add("GET", "/api/v1/categories", CategoriesController::class, "getAll", [AuthAdminMiddleware::class]);
+Router::add("PATCH", "/api/v1/categories/([0-9]+)", CategoriesController::class, "update", [AuthAdminMiddleware::class]);
 // ! ===========
 
 

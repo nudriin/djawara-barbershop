@@ -8,6 +8,7 @@ use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Helper\ErrorHelper;
 use Nurdin\Djawara\Model\Categories\CategoriesAddRequest;
 use Nurdin\Djawara\Model\Categories\CategoriesGetRequest;
+use Nurdin\Djawara\Model\Categories\CategoriesUpdateRequest;
 use Nurdin\Djawara\Repository\CategoriesRepository;
 use Nurdin\Djawara\Service\CategoriesService;
 
@@ -80,6 +81,34 @@ class CategoriesController
             http_response_code(200);
             echo json_encode([
                 'data' => $categories->categories
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
+
+    public function update(string $id)
+    {
+        try {
+            $json = file_get_contents('php://input');
+            $request = json_decode($json);
+
+            if (!isset($id)) throw new ValidationException("Id is required", 400);
+
+            $updateRequest = new CategoriesUpdateRequest();
+            $updateRequest->id = $id;
+
+            if (isset($request->name) && $request->name != null) $updateRequest->name = $request->name;
+            if (isset($request->price) && $request->name != null) $updateRequest->price = $request->price;
+
+            $categories = $this->categoriesService->updateCategories($updateRequest);
+
+            echo json_encode([
+                'data' => [
+                    'id' => $categories->categories->id,
+                    'name' => $categories->categories->name,
+                    'price' => $categories->categories->price
+                ]
             ]);
         } catch (Exception $e) {
             ErrorHelper::errors($e);

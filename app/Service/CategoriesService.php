@@ -10,6 +10,8 @@ use Nurdin\Djawara\Model\Categories\CategoriesAddResponse;
 use Nurdin\Djawara\Model\Categories\CategoriesGetAllResponse;
 use Nurdin\Djawara\Model\Categories\CategoriesGetRequest;
 use Nurdin\Djawara\Model\Categories\CategoriesGetResponse;
+use Nurdin\Djawara\Model\Categories\CategoriesUpdateRequest;
+use Nurdin\Djawara\Model\Categories\CategoriesUpdateResponse;
 use Nurdin\Djawara\Repository\CategoriesRepository;
 
 class CategoriesService
@@ -83,11 +85,11 @@ class CategoriesService
         }
     }
 
-    public function getAllCategories() : CategoriesGetAllResponse
+    public function getAllCategories(): CategoriesGetAllResponse
     {
         try {
             $categories = $this->categoriesRepo->findAll();
-            if($categories == null) {
+            if ($categories == null) {
                 throw new ValidationException("Categories not found", 404);
             }
 
@@ -97,6 +99,39 @@ class CategoriesService
             return $response;
         } catch (ValidationException $e) {
             throw $e;
+        }
+    }
+
+    public function updateCategories(CategoriesUpdateRequest $request): CategoriesUpdateResponse
+    {
+        $this->validateUpdateCategories($request);
+        try {
+            Database::beginTransaction();
+            $categories = $this->categoriesRepo->findById($request->id);
+            if ($categories == null) {
+                throw new ValidationException("Categories not found", 404);
+            }
+
+            if (isset($request->name) && $request->name != null) $categories->name = $request->name;
+            if (isset($request->price) && $request->price != null) $categories->price = $request->price;
+
+            $this->categoriesRepo->update($categories);
+            Database::commitTransaction();
+
+            $response = new CategoriesUpdateResponse();
+            $response->categories = $categories;
+
+            return $response;
+        } catch (ValidationException $e) {
+            Database::rollbackTransaction();
+            throw $e;
+        }
+    }
+
+    public function validateUpdateCategories(CategoriesUpdateRequest $request)
+    {
+        if ($request->id == null || trim($request->id) == "" || trim($request->name) == "" || $request->price < 0) {
+            throw new ValidationException("Name cannot blank and price must be positive", 400);
         }
     }
 }

@@ -92,8 +92,8 @@ class KapstersController
         try {
             if (!isset($id)) throw new ValidationException("Id is required", 400);
             $json = file_get_contents('php://input');
-
-            $request = json_decode($json);                
+            $request = json_decode($json);      
+            
             $updateRequest = new KapstersUpdateRequest();
             $updateRequest->id = $id;
             if (isset($request->name) && $request->name != null) $updateRequest->name = $request->name;

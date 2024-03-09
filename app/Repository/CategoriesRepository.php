@@ -48,4 +48,18 @@ class CategoriesRepository
             return null;
         }
     }
+
+    public function update(Categories $categories) : Categories
+    {
+        $stmt = $this->connection->prepare("UPDATE categories SET name = ?, price = ? WHERE id = ?");
+        $stmt->execute([$categories->name, $categories->price, $categories->id]);
+
+        return $categories;
+    }
+
+    public function remove(string $id) 
+    {
+        $stmt = $this->connection->prepare("DELETE FROM categories WHERE id = ?");
+        $stmt->execute([$id]);
+    }
 }
