@@ -2,6 +2,7 @@
 
 use Nurdin\Djawara\App\Router;
 use Nurdin\Djawara\Controller\AccountController;
+use Nurdin\Djawara\Controller\CategoriesController;
 use Nurdin\Djawara\Controller\KapstersController;
 use Nurdin\Djawara\Middleware\AuthAdminMiddleware;
 use Nurdin\Djawara\Middleware\AuthMiddleware;
@@ -34,6 +35,10 @@ Router::add("GET", "/api/v1/kapsters", KapstersController::class, "getAll", [Aut
 Router::add("GET", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "getById", [AuthAdminMiddleware::class]);
 Router::add("PATCH", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "update", [AuthAdminMiddleware::class]);
 Router::add("DELETE", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "remove", [AuthAdminMiddleware::class]);
+// ! ===========
+
+// ! CATEGORIES ROUTES
+Router::add("POST", "/api/v1/categories", CategoriesController::class, "add", [AuthAdminMiddleware::class]);
 // ! ===========
 
 

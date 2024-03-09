@@ -1,4 +1,5 @@
 <?php
+
 namespace Nurdin\Djawara\Middleware;
 
 use Dotenv\Dotenv;
@@ -24,7 +25,7 @@ class AuthMiddleware implements Middleware
         $dotenv->load();
     }
 
-    public function auth() : void
+    public function auth(): void
     {
         try {
             $authorization = $_SERVER['HTTP_AUTHORIZATION'];
@@ -38,22 +39,24 @@ class AuthMiddleware implements Middleware
 
             $account = $this->accountService->getUser($request);
 
-            if($account == null) {
+            if ($account == null) {
                 throw new ValidationException("User not found", 404);
             }
-            
+
             $user = [
+                'id' => $account->account->id,
                 'username' => $account->account->username,
                 'email' => $account->account->email,
-                'name' => $account->account->name,       
-                'name' => $account->account->name,       
-                'profile_pic' => $account->account->profile_pic      
+                'name' => $account->account->name,
+                'phone' => $account->account->phone,
+                'role' => $account->account->role,
+                'address' => $account->account->address,
+                'profile_pic' => $account->account->profile_pic,
             ];
 
             http_response_code(200);
             $json = json_encode($user);
             header("user: $json");
-
         } catch (Exception $e) {
             // SignatureInvalidException // ! error dari jwtnya
             http_response_code($e->getCode());
