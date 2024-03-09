@@ -66,7 +66,7 @@ class CategoriesService
             $categories = $this->categoriesRepo->findById($request->id);
 
             if ($categories == null) {
-                throw new ValidationException("Categories not found", 404);
+                throw new ValidationException("Category not found", 404);
             }
 
             $response = new CategoriesGetResponse();
@@ -109,7 +109,7 @@ class CategoriesService
             Database::beginTransaction();
             $categories = $this->categoriesRepo->findById($request->id);
             if ($categories == null) {
-                throw new ValidationException("Categories not found", 404);
+                throw new ValidationException("Category not found", 404);
             }
 
             if (isset($request->name) && $request->name != null) $categories->name = $request->name;
@@ -132,6 +132,24 @@ class CategoriesService
     {
         if ($request->id == null || trim($request->id) == "" || trim($request->name) == "" || $request->price < 0) {
             throw new ValidationException("Name cannot blank and price must be positive", 400);
+        }
+    }
+
+    public function removeCategories(CategoriesGetRequest $request)
+    {
+        $this->validateGetCategoriesById($request);
+        try {
+            Database::beginTransaction();
+            $categories = $this->categoriesRepo->findById($request->id);
+            if ($categories == null) {
+                throw new ValidationException("Category not found", 404);
+            }
+
+            $this->categoriesRepo->remove($categories->id);
+            Database::commitTransaction();
+        } catch (ValidationException $e) {
+            Database::rollbackTransaction();
+            throw $e;
         }
     }
 }
