@@ -41,4 +41,16 @@ class SchedulesRepository
             return null;
         }
     }
+
+    public function findAll() : ?array
+    {
+        $stmt = $this->connection->prepare("SELECT * FROM  schedules ORDER BY start_date DESC");
+        $stmt->execute();
+
+        if($stmt->rowCount() > 0) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return null;
+        }
+    }
 }

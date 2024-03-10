@@ -7,6 +7,7 @@ use Nurdin\Djawara\Domain\Schedules;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Schedules\SchedulesAddRequest;
 use Nurdin\Djawara\Model\Schedules\SchedulesAddResponse;
+use Nurdin\Djawara\Model\Schedules\SchedulesGetAllResponse;
 use Nurdin\Djawara\Model\Schedules\SchedulesGetRequest;
 use Nurdin\Djawara\Model\Schedules\SchedulesGetResponse;
 use Nurdin\Djawara\Repository\SchedulesRepository;
@@ -77,6 +78,21 @@ class SchedulesService
     {
         if ($request->id == null || trim($request->id) == "") {
             throw new ValidationException("Id is required", 400);
+        }
+    }
+
+    public function getAllSchedules() : SchedulesGetAllResponse
+    {
+        try {
+            $schedules = $this->schedulesRepo->findAll();
+            if($schedules == null) throw new ValidationException("Schedule not found", 404);
+
+            $response = new SchedulesGetAllResponse();
+            $response->schedules = $schedules;
+
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
         }
     }
 }

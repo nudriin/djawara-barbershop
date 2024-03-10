@@ -57,7 +57,7 @@ class SchedulesController
     public function getById(string $id)
     {
         try {
-            if(!isset($id)) throw new ValidationException("Id is required", 400);
+            if (!isset($id)) throw new ValidationException("Id is required", 400);
 
             $request = new SchedulesGetRequest();
             $request->id = $id;
@@ -76,6 +76,20 @@ class SchedulesController
                 ]
             ]);
         } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
+
+    public function getAll()
+    {
+        try {
+            $schedules = $this->schedulesService->getAllSchedules();
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => $schedules
+            ]); 
+        } catch (ValidationException $e) {
             ErrorHelper::errors($e);
         }
     }
