@@ -41,7 +41,7 @@ class KapstersRepository
 
     public function findAll() : ?array
     {
-        $stmt = $this->connection->prepare('SELECT * FROM kapsters');
+        $stmt = $this->connection->prepare('SELECT * FROM kapsters ORDER BY name ASC');
         $stmt->execute();
 
         if($stmt->rowCount() > 0){

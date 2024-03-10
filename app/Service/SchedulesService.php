@@ -10,6 +10,8 @@ use Nurdin\Djawara\Model\Schedules\SchedulesAddResponse;
 use Nurdin\Djawara\Model\Schedules\SchedulesGetAllResponse;
 use Nurdin\Djawara\Model\Schedules\SchedulesGetRequest;
 use Nurdin\Djawara\Model\Schedules\SchedulesGetResponse;
+use Nurdin\Djawara\Model\Schedules\SchedulesUpdateRequest;
+use Nurdin\Djawara\Model\Schedules\SchedulesUpdateResponse;
 use Nurdin\Djawara\Repository\SchedulesRepository;
 
 class SchedulesService
@@ -81,17 +83,43 @@ class SchedulesService
         }
     }
 
-    public function getAllSchedules() : SchedulesGetAllResponse
+    public function getAllSchedules(): SchedulesGetAllResponse
     {
         try {
             $schedules = $this->schedulesRepo->findAll();
-            if($schedules == null) throw new ValidationException("Schedule not found", 404);
+            if ($schedules == null) throw new ValidationException("Schedule not found", 404);
 
             $response = new SchedulesGetAllResponse();
             $response->schedules = $schedules;
 
             return $response;
         } catch (ValidationException $e) {
+            throw $e;
+        }
+    }
+
+    public function updateSchedules(SchedulesUpdateRequest $request): SchedulesUpdateResponse
+    {
+        try {
+            Database::beginTransaction();
+            $schedules = $this->schedulesRepo->findById($request->id);
+            if ($schedules == null) throw new ValidationException("Schedule not found", 404);
+
+            if (isset($request->kapster_id) && $request->kapster_id !== null) $schedules->kapster_id = $request->kapster_id;
+            if (isset($request->category_id) && $request->category_id !== null) $schedules->category_id = $request->category_id;
+            if (isset($request->start_date) && $request->start_date !== null) $schedules->start_date = $request->start_date;
+            if (isset($request->end_date) && $request->end_date !== null) $schedules->end_date = $request->end_date;
+            if (isset($request->status) && $request->status !== null && trim($schedules->status) != "") $schedules->status = $request->status;
+
+            $this->schedulesRepo->update($schedules);
+            Database::commitTransaction();
+
+            $response = new SchedulesUpdateResponse();
+            $response->schedules = $schedules;
+
+            return $response;
+        } catch (ValidationException $e) {
+            Database::rollbackTransaction();
             throw $e;
         }
     }

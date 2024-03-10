@@ -53,4 +53,18 @@ class SchedulesRepository
             return null;
         }
     }
+
+    public function update(Schedules $schedules) : Schedules
+    {
+        $stmt = $this->connection->prepare("UPDATE schedules SET kapster_id = ?, category_id = ?, start_date = ?, end_date = ?, status = ? WHERE id = ?");
+        $stmt->execute([$schedules->kapster_id, $schedules->category_id, $schedules->start_date, $schedules->end_date, $schedules->status, $schedules->id]);
+
+        return $schedules;
+    }
+
+    public function remove(string $id) 
+    {
+        $stmt = $this->connection->prepare("DELETE FROM schedules WHERE id = ?");
+        $stmt->execute([$id]);
+    }
 }

@@ -39,7 +39,7 @@ class CategoriesRepository
 
     public function findAll() : ?array
     {
-        $stmt = $this->connection->prepare("SELECT * FROM categories");
+        $stmt = $this->connection->prepare("SELECT * FROM categories ORDER BY name ASC");
         $stmt->execute();
 
         if($stmt->rowCount() > 0){

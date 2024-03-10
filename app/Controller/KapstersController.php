@@ -77,6 +77,7 @@ class KapstersController
             http_response_code(200);
             echo json_encode([
                 'data' => [
+                    'id' => $kapsters->kapsters->id,
                     'name' => $kapsters->kapsters->name,
                     'phone' => $kapsters->kapsters->phone,
                     'profile_pic' => $kapsters->kapsters->profile_pic,
@@ -104,6 +105,7 @@ class KapstersController
             http_response_code(200);
             echo json_encode([
                 'data' => [
+                    'id' => $kapsters->kapsters->id,
                     'name' => $kapsters->kapsters->name,
                     'phone' => $kapsters->kapsters->phone,
                     'profile_pic' => $kapsters->kapsters->profile_pic,
