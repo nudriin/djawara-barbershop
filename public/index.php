@@ -4,6 +4,7 @@ use Nurdin\Djawara\App\Router;
 use Nurdin\Djawara\Controller\AccountController;
 use Nurdin\Djawara\Controller\CategoriesController;
 use Nurdin\Djawara\Controller\KapstersController;
+use Nurdin\Djawara\Controller\SchedulesController;
 use Nurdin\Djawara\Middleware\AuthAdminMiddleware;
 use Nurdin\Djawara\Middleware\AuthMiddleware;
 
@@ -45,6 +46,11 @@ Router::add("PATCH", "/api/v1/categories/([0-9]+)", CategoriesController::class,
 Router::add("DELETE", "/api/v1/categories/([0-9]+)", CategoriesController::class, "remove", [AuthAdminMiddleware::class]);
 // ! ===========
 
+// ! CATEGORIES ROUTES
+Router::add("POST", "/api/v1/schedules", SchedulesController::class, "add", [AuthAdminMiddleware::class]);
+
+
+// ! ===========
 
 Router::run();
 

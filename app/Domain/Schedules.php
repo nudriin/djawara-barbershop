@@ -1,13 +1,14 @@
 <?php
 namespace Nurdin\Djawara\Domain;
 
-class Account
+class Schedules
 {
     public int $id;
-    public string $username;
-    public string $email;
-    public string $password;
-    public string $name;
+    public int $kapster_id;
+    public int $category_id;
+    public string $start_date;
+    public string $end_date;
+    public string $status;
     public string $phone;
     public string $role;
     public ?string $profile_pic;
