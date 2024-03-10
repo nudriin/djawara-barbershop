@@ -28,6 +28,7 @@ Router::add("DELETE", "/api/v1/users/current/delete", AccountController::class, 
 // ! AUTH ADMIN ROUTES
 Router::add("POST", "/api/v1/admins", AccountController::class, "adminRegister", [AuthAdminMiddleware::class]);
 Router::add("POST", "/api/v1/admins/login", AccountController::class, "login");
+Router::add("GET", "/api/v1/admins/accounts", AccountController::class, "getAll", [AuthAdminMiddleware::class]);
 // ! ===========
 
 // ! KAPSTERS ROUTES
@@ -46,7 +47,7 @@ Router::add("PATCH", "/api/v1/categories/([0-9]+)", CategoriesController::class,
 Router::add("DELETE", "/api/v1/categories/([0-9]+)", CategoriesController::class, "remove", [AuthAdminMiddleware::class]);
 // ! ===========
 
-// ! CATEGORIES ROUTES
+// ! SCHEDULES ROUTES
 Router::add("POST", "/api/v1/schedules", SchedulesController::class, "add", [AuthAdminMiddleware::class]);
 Router::add("GET", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "getById", [AuthAdminMiddleware::class]);
 Router::add("GET", "/api/v1/schedules", SchedulesController::class, "getAll", [AuthAdminMiddleware::class]);

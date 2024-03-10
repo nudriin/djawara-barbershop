@@ -9,6 +9,8 @@ use Nurdin\Djawara\Domain\Account;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Account\AccountDeleteRequest;
 use Nurdin\Djawara\Model\Account\AccountDisplayResponse;
+use Nurdin\Djawara\Model\Account\AccountGetAllRequest;
+use Nurdin\Djawara\Model\Account\AccountGetAllResponse;
 use Nurdin\Djawara\Model\Account\AccountGetRequest;
 use Nurdin\Djawara\Model\Account\AccountGetResponse;
 use Nurdin\Djawara\Model\Account\AccountLoginRequest;
@@ -243,5 +245,19 @@ class AccountService
             throw new ValidationException("Password is required", 400);
         }
     }
+    
+    public function getAllAccount() : AccountGetAllResponse
+    {
+        try {
+            $account = $this->accountRepository->findAll();
+            if($account == null) throw new ValidationException("User not found", 404);
+            
+            $response = new AccountGetAllResponse();
+            $response->account = $account;
 
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+    }
 }

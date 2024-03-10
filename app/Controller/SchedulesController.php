@@ -90,7 +90,7 @@ class SchedulesController
             echo json_encode([
                 'data' => $schedules
             ]);
-        } catch (ValidationException $e) {
+        } catch (Exception $e) {
             ErrorHelper::errors($e);
         }
     }

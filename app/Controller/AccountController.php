@@ -2,6 +2,7 @@
 
 namespace Nurdin\Djawara\Controller;
 
+use Exception;
 use Nurdin\Djawara\Config\Database;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Helper\ErrorHelper;
@@ -286,6 +287,20 @@ class AccountController
                 'data' => 'OK'
             ]);
         } catch (ValidationException $e) {
+            ErrorHelper::errors($e);
+        }
+    }
+
+    public function getAll()
+    {
+        try {
+            $account = $this->accountService->getAllAccount();
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => $account->account
+            ]);
+        } catch (Exception $e) {
             ErrorHelper::errors($e);
         }
     }
