@@ -48,6 +48,7 @@ Router::add("DELETE", "/api/v1/categories/([0-9]+)", CategoriesController::class
 
 // ! CATEGORIES ROUTES
 Router::add("POST", "/api/v1/schedules", SchedulesController::class, "add", [AuthAdminMiddleware::class]);
+Router::add("GET", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "getById", [AuthAdminMiddleware::class]);
 
 
 // ! ===========

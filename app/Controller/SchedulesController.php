@@ -7,6 +7,7 @@ use Nurdin\Djawara\Config\Database;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Helper\ErrorHelper;
 use Nurdin\Djawara\Model\Schedules\SchedulesAddRequest;
+use Nurdin\Djawara\Model\Schedules\SchedulesGetRequest;
 use Nurdin\Djawara\Repository\SchedulesRepository;
 use Nurdin\Djawara\Service\SchedulesService;
 
@@ -46,6 +47,32 @@ class SchedulesController
                     'category_id' => $schedules->schedules->category_id,
                     'start_date' => $schedules->schedules->start_date,
                     'end_date' => $schedules->schedules->end_date,
+                ]
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
+
+    public function getById(string $id)
+    {
+        try {
+            if(!isset($id)) throw new ValidationException("Id is required", 400);
+
+            $request = new SchedulesGetRequest();
+            $request->id = $id;
+
+            $schedules = $this->schedulesService->getSchedulesById($request);
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => [
+                    'id' => $schedules->schedules->id,
+                    'kapster_id' => $schedules->schedules->kapster_id,
+                    'category_id' => $schedules->schedules->category_id,
+                    'start_date' => $schedules->schedules->start_date,
+                    'end_date' => $schedules->schedules->end_date,
+                    'status' => $schedules->schedules->status
                 ]
             ]);
         } catch (Exception $e) {
