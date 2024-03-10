@@ -123,4 +123,22 @@ class SchedulesService
             throw $e;
         }
     }
+
+    public function removeSchedules(SchedulesGetRequest $request)
+    {
+        $this->validateGetSchedulesById($request);
+        try {
+            Database::beginTransaction();
+            $schedules = $this->schedulesRepo->findById($request->id);
+            if($schedules == null) {
+                throw new ValidationException("Schedule not found", 404);
+            }
+
+            $this->schedulesRepo->remove($schedules->id);
+            Database::commitTransaction();
+        } catch (ValidationException $e) {
+            Database::rollbackTransaction();
+            throw $e;
+        }
+    }
 }

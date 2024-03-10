@@ -51,6 +51,7 @@ Router::add("POST", "/api/v1/schedules", SchedulesController::class, "add", [Aut
 Router::add("GET", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "getById", [AuthAdminMiddleware::class]);
 Router::add("GET", "/api/v1/schedules", SchedulesController::class, "getAll", [AuthAdminMiddleware::class]);
 Router::add("PATCH", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "update", [AuthAdminMiddleware::class]);
+Router::add("DELETE", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "remove", [AuthAdminMiddleware::class]);
 // ! ===========
 
 Router::run();

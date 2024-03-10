@@ -126,4 +126,22 @@ class SchedulesController
             ErrorHelper::errors($e);
         }
     }
+
+    public function remove(string $id)
+    {
+        try {
+            if (!isset($id)) throw new ValidationException("Id is required", 400);
+
+            $request = new SchedulesGetRequest();
+            $request->id = $id;
+            $this->schedulesService->removeSchedules($request);
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => 'OK'
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
 }
