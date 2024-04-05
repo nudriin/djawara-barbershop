@@ -137,6 +137,7 @@ class AccountController
             $token = $this->accountService->login($loginRequest);
 
             http_response_code(200);
+            header("Set-Cookie: user_id=" . $loginRequest->username . "; expires=" . (time() + (86400 * 30)) . "; path=/");
             echo json_encode([
                 'data' => [
                     'token' => $token->token
@@ -206,7 +207,7 @@ class AccountController
             if (isset($request->address) && $request->address != null) {
                 $updateRequest->address = $request->address;
             }
-            
+
             if (isset($request->phone) && $request->phone != null) {
                 $updateRequest->phone = $request->phone;
             }
