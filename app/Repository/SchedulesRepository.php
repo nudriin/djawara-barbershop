@@ -16,8 +16,8 @@ class SchedulesRepository
 
     public function save(Schedules $schedules): Schedules
     {
-        $stmt = $this->connection->prepare("INSERT INTO schedules(kapster_id, category_id, start_date, end_date, status) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$schedules->kapster_id, $schedules->category_id, $schedules->start_date, $schedules->end_date, $schedules->status]);
+        $stmt = $this->connection->prepare("INSERT INTO schedules(kapster_id, category_id, dates, times, status) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$schedules->kapster_id, $schedules->category_id, $schedules->dates, $schedules->times, $schedules->status]);
 
         return $schedules;
     }
@@ -32,8 +32,8 @@ class SchedulesRepository
             $schedules->id = $row['id'];
             $schedules->kapster_id = $row['kapster_id'];
             $schedules->category_id = $row['category_id'];
-            $schedules->start_date = $row['start_date'];
-            $schedules->end_date = $row['end_date'];
+            $schedules->dates = $row['dates'];
+            $schedules->times = $row['times'];
             $schedules->status = $row['status'];
 
             return $schedules;
@@ -44,7 +44,7 @@ class SchedulesRepository
 
     public function findAll() : ?array
     {
-        $stmt = $this->connection->prepare("SELECT * FROM  schedules ORDER BY start_date DESC");
+        $stmt = $this->connection->prepare("SELECT * FROM  schedules ORDER BY dates DESC");
         $stmt->execute();
 
         if($stmt->rowCount() > 0) {
@@ -56,8 +56,8 @@ class SchedulesRepository
 
     public function update(Schedules $schedules) : Schedules
     {
-        $stmt = $this->connection->prepare("UPDATE schedules SET kapster_id = ?, category_id = ?, start_date = ?, end_date = ?, status = ? WHERE id = ?");
-        $stmt->execute([$schedules->kapster_id, $schedules->category_id, $schedules->start_date, $schedules->end_date, $schedules->status, $schedules->id]);
+        $stmt = $this->connection->prepare("UPDATE schedules SET kapster_id = ?, category_id = ?, dates = ?, times = ?, status = ? WHERE id = ?");
+        $stmt->execute([$schedules->kapster_id, $schedules->category_id, $schedules->dates, $schedules->times, $schedules->status, $schedules->id]);
 
         return $schedules;
     }

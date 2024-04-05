@@ -3,5 +3,5 @@ namespace Nurdin\Djawara\Model\Account;
 
 class AccountGetAllResponse
 {
-    public ?array $role = null;
+    public ?array $account = null;
 }
