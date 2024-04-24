@@ -42,7 +42,7 @@ class AuthAdminMiddleware implements Middleware
             $account = $this->accountService->getUser($request);
 
             if ($account == null) throw new ValidationException("User not found", 404);
-            if ($account->account->role != "ADMIN") throw new ValidationException("Unauthorized", 401);
+            if ($account->account->role == "USER") throw new ValidationException("Unauthorized", 401);
 
             $user = [
                 'id' => $account->account->id,

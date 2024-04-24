@@ -33,24 +33,24 @@ Router::add("GET", "/api/v1/admins/accounts", AccountController::class, "getAll"
 
 // ! KAPSTERS ROUTES
 Router::add("POST", "/api/v1/kapsters", KapstersController::class, "add", [AuthAdminMiddleware::class]);
-Router::add("GET", "/api/v1/kapsters", KapstersController::class, "getAll", [AuthAdminMiddleware::class]);
-Router::add("GET", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "getById", [AuthAdminMiddleware::class]);
+Router::add("GET", "/api/v1/kapsters", KapstersController::class, "getAll");
+Router::add("GET", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "getById");
 Router::add("PATCH", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "update", [AuthAdminMiddleware::class]);
 Router::add("DELETE", "/api/v1/kapsters/([0-9]+)", KapstersController::class, "remove", [AuthAdminMiddleware::class]);
 // ! ===========
 
 // ! CATEGORIES ROUTES
 Router::add("POST", "/api/v1/categories", CategoriesController::class, "add", [AuthAdminMiddleware::class]);
-Router::add("GET", "/api/v1/categories/([0-9]+)", CategoriesController::class, "getById", [AuthAdminMiddleware::class]);
-Router::add("GET", "/api/v1/categories", CategoriesController::class, "getAll", [AuthAdminMiddleware::class]);
+Router::add("GET", "/api/v1/categories/([0-9]+)", CategoriesController::class, "getById");
+Router::add("GET", "/api/v1/categories", CategoriesController::class, "getAll");
 Router::add("PATCH", "/api/v1/categories/([0-9]+)", CategoriesController::class, "update", [AuthAdminMiddleware::class]);
 Router::add("DELETE", "/api/v1/categories/([0-9]+)", CategoriesController::class, "remove", [AuthAdminMiddleware::class]);
 // ! ===========
 
 // ! SCHEDULES ROUTES
 Router::add("POST", "/api/v1/schedules", SchedulesController::class, "add", [AuthAdminMiddleware::class]);
-Router::add("GET", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "getById", [AuthAdminMiddleware::class]);
-Router::add("GET", "/api/v1/schedules", SchedulesController::class, "getAll", [AuthAdminMiddleware::class]);
+Router::add("GET", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "getById");
+Router::add("GET", "/api/v1/schedules", SchedulesController::class, "getAll");
 Router::add("PATCH", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "update", [AuthAdminMiddleware::class]);
 Router::add("DELETE", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "remove", [AuthAdminMiddleware::class]);
 // ! ===========

@@ -130,7 +130,7 @@ class CategoriesService
 
     public function validateUpdateCategories(CategoriesUpdateRequest $request)
     {
-        if ($request->id == null || trim($request->id) == "" || trim($request->name) == "" || $request->price < 0) {
+        if ($request->id == null || trim($request->id) == "" || $request->price < 0) {
             throw new ValidationException("Name cannot blank and price must be positive", 400);
         }
     }

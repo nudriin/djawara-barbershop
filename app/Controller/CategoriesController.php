@@ -99,7 +99,7 @@ class CategoriesController
             $updateRequest->id = $id;
 
             if (isset($request->name) && $request->name != null) $updateRequest->name = $request->name;
-            if (isset($request->price) && $request->name != null) $updateRequest->price = $request->price;
+            if (isset($request->price) && $request->price != null) $updateRequest->price = $request->price;
 
             $categories = $this->categoriesService->updateCategories($updateRequest);
 
