@@ -59,7 +59,7 @@ class CategoriesRepository
 
     public function remove(string $id) 
     {
-        $stmt = $this->connection->prepare("DELETE FROM categories WHERE id = ?");
+        $stmt = $this->connection->prepare("CALL deleteCategory(?)");
         $stmt->execute([$id]);
     }
 }

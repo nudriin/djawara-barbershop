@@ -44,7 +44,7 @@ class SchedulesRepository
 
     public function findAll() : ?array
     {
-        $stmt = $this->connection->prepare("SELECT * FROM  schedules ORDER BY dates DESC");
+        $stmt = $this->connection->prepare("SELECT * FROM getAllSchedules ORDER BY dates DESC");
         $stmt->execute();
 
         if($stmt->rowCount() > 0) {

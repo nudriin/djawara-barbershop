@@ -29,15 +29,15 @@ class SchedulesController
             $json = file_get_contents('php://input');
             $request = json_decode($json);
 
-            if (!isset($request->kapster_id) || !isset($request->category_id) || !isset($request->start_date) || !isset($request->end_date)) {
-                throw new ValidationException("kapster_id, category_id, start_date and end_date is required", 400);
+            if (!isset($request->kapster_id) || !isset($request->category_id) || !isset($request->dates) || !isset($request->times)) {
+                throw new ValidationException("kapster_id, category_id, dates and times is required", 400);
             }
 
             $addRequest = new SchedulesAddRequest();
             $addRequest->kapster_id = $request->kapster_id;
             $addRequest->category_id = $request->category_id;
-            $addRequest->start_date = $request->start_date;
-            $addRequest->end_date = $request->end_date;
+            $addRequest->dates = $request->dates;
+            $addRequest->times = $request->times;
 
             $schedules = $this->schedulesService->addSchedules($addRequest);
 
@@ -46,8 +46,8 @@ class SchedulesController
                 'data' => [
                     'kapster_id' => $schedules->schedules->kapster_id,
                     'category_id' => $schedules->schedules->category_id,
-                    'start_date' => $schedules->schedules->start_date,
-                    'end_date' => $schedules->schedules->end_date,
+                    'dates' => $schedules->schedules->dates,
+                    'times' => $schedules->schedules->times,
                 ]
             ]);
         } catch (Exception $e) {
@@ -71,8 +71,8 @@ class SchedulesController
                     'id' => $schedules->schedules->id,
                     'kapster_id' => $schedules->schedules->kapster_id,
                     'category_id' => $schedules->schedules->category_id,
-                    'start_date' => $schedules->schedules->start_date,
-                    'end_date' => $schedules->schedules->end_date,
+                    'dates' => $schedules->schedules->dates,
+                    'times' => $schedules->schedules->times,
                     'status' => $schedules->schedules->status
                 ]
             ]);
@@ -106,8 +106,8 @@ class SchedulesController
             $updateRequest->id = $id;
             if (isset($request->kapster_id) && $request->kapster_id != null) $updateRequest->kapster_id = $request->kapster_id;
             if (isset($request->category_id) && $request->category_id != null) $updateRequest->category_id = $request->category_id;
-            if (isset($request->start_date) && $request->start_date != null) $updateRequest->start_date = $request->start_date;
-            if (isset($request->end_date) && $request->end_date != null) $updateRequest->end_date = $request->end_date;
+            if (isset($request->dates) && $request->dates != null) $updateRequest->dates = $request->dates;
+            if (isset($request->times) && $request->times != null) $updateRequest->times = $request->times;
             if (isset($request->status) && $request->status != null) $updateRequest->status = $request->status;
 
             $schedules = $this->schedulesService->updateSchedules($updateRequest);
@@ -117,8 +117,8 @@ class SchedulesController
                     'id' => $schedules->schedules->id,
                     'kapster_id' => $schedules->schedules->kapster_id,
                     'category_id' => $schedules->schedules->category_id,
-                    'start_date' => $schedules->schedules->start_date,
-                    'end_date' => $schedules->schedules->end_date,
+                    'dates' => $schedules->schedules->dates,
+                    'times' => $schedules->schedules->times,
                     'status' => $schedules->schedules->status,
                 ]
             ]);
