@@ -7,6 +7,8 @@ use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Orders\OrdersAddRequest;
 use Nurdin\Djawara\Model\Orders\OrdersAddResponse;
 use Nurdin\Djawara\Model\Orders\OrdersGetAllResponse;
+use Nurdin\Djawara\Model\Orders\OrdersGetByIdRequest;
+use Nurdin\Djawara\Model\Orders\OrdersGetByIdResponse;
 use Nurdin\Djawara\Model\Orders\OrdersUpdateRequest;
 use Nurdin\Djawara\Model\Orders\OrdersUpdateResponse;
 use Nurdin\Djawara\Repository\OrdersRepository;
@@ -50,6 +52,31 @@ class OrdersService
             trim($request->account_id) == "" || trim($request->total_price) == "" || trim($request->schedule_id) == ""
         ) {
             throw new ValidationException("account_id, total_price and schedule_id is required", 400);
+        }
+    }
+
+    public function getOrdersById(OrdersGetByIdRequest $request): OrdersGetByIdResponse
+    {
+        try {
+            $orders = $this->ordersRepo->findById($request->id);
+
+            if ($orders == null) {
+                throw new ValidationException("Orders not found", 404);
+            }
+
+            $response = new OrdersGetByIdResponse();
+            $response->orders = $orders;
+
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+    }
+
+    public function validateGetSchedulesById(OrdersGetByIdRequest $request)
+    {
+        if ($request->id == null || trim($request->id) == "") {
+            throw new ValidationException("Id is required", 400);
         }
     }
 

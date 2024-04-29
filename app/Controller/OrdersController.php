@@ -6,6 +6,7 @@ use Nurdin\Djawara\Config\Database;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Helper\ErrorHelper;
 use Nurdin\Djawara\Model\Orders\OrdersAddRequest;
+use Nurdin\Djawara\Model\Orders\OrdersGetByIdRequest;
 use Nurdin\Djawara\Model\Orders\OrdersUpdateRequest;
 use Nurdin\Djawara\Repository\OrdersRepository;
 use Nurdin\Djawara\Service\OrdersService;
@@ -43,6 +44,32 @@ class OrdersController
                 'data' => [
                     'account_id' => $orders->orders->account_id,
                     'total_price' => $orders->orders->total_price,
+                    'schedule_id' => $orders->orders->schedule_id
+                ]
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
+
+    public function getById(string $id)
+    {
+        try {
+            if (!isset($id)) throw new ValidationException("Id is required", 400);
+
+            $request = new OrdersGetByIdRequest();
+            $request->id = $id;
+
+            $orders = $this->ordersService->getOrdersById($request);
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => [
+                    'id' => $orders->orders->id,
+                    'account_id' => $orders->orders->account_id,
+                    'order_date' => $orders->orders->order_date,
+                    'total_price' => $orders->orders->total_price,
+                    'status' => $orders->orders->status,
                     'schedule_id' => $orders->orders->schedule_id
                 ]
             ]);
