@@ -67,6 +67,4 @@ class OrdersRepository
         $stmt = $this->connection->prepare("DELETE FROM orders WHERE id = ?");
         $stmt->execute([$id]);
     }
-
-
 }
