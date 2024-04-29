@@ -6,6 +6,7 @@ use Nurdin\Djawara\Config\Database;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Helper\ErrorHelper;
 use Nurdin\Djawara\Model\Orders\OrdersAddRequest;
+use Nurdin\Djawara\Model\Orders\OrdersGetAllRequest;
 use Nurdin\Djawara\Model\Orders\OrdersGetByIdRequest;
 use Nurdin\Djawara\Model\Orders\OrdersUpdateRequest;
 use Nurdin\Djawara\Repository\OrdersRepository;
@@ -87,6 +88,25 @@ class OrdersController
             ]);
         } catch (Exception $e) {
             ErrorHelper::errors($e);
+        }
+    }
+    
+    public function getAllByAccountId(string $account_id)
+    {
+        try {
+            if (!isset($account_id)) throw new ValidationException("Id is required", 400);
+
+            $request = new OrdersGetAllRequest();
+            $request->account_id = $account_id;
+            $orders = $this->ordersService->getAllOrdersByAccountId($request);
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => $orders->orders
+            ]);
+        } catch (Exception $e) {
+            echo $e;
+            // ErrorHelper::errors($e);
         }
     }
 

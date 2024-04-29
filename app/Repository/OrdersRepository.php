@@ -41,10 +41,15 @@ class OrdersRepository
         }
     }
 
-    public function findAll() : ?array
+    public function findAll(?int $account_id) : ?array
     {
-        $stmt = $this->connection->prepare('SELECT * FROM getallorders ORDER BY order_date ASC');
-        $stmt->execute();
+        if($account_id != null) {
+            $stmt = $this->connection->prepare('SELECT * FROM getallorders WHERE account_id = ? ORDER BY order_date ASC');
+            $stmt->execute([$account_id]);
+        } else {
+            $stmt = $this->connection->prepare('SELECT * FROM getallorders ORDER BY order_date ASC');
+            $stmt->execute();
+        }
 
         if($stmt->rowCount() > 0){
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

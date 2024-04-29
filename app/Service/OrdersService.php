@@ -7,6 +7,7 @@ use Nurdin\Djawara\Domain\Orders;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Orders\OrdersAddRequest;
 use Nurdin\Djawara\Model\Orders\OrdersAddResponse;
+use Nurdin\Djawara\Model\Orders\OrdersGetAllRequest;
 use Nurdin\Djawara\Model\Orders\OrdersGetAllResponse;
 use Nurdin\Djawara\Model\Orders\OrdersGetByIdRequest;
 use Nurdin\Djawara\Model\Orders\OrdersGetByIdResponse;
@@ -83,7 +84,25 @@ class OrdersService
     public function getAllOrders(): OrdersGetAllResponse
     {
         try {
-            $orders = $this->ordersRepo->findAll();
+            $orders = $this->ordersRepo->findAll(null);
+            if ($orders == null) {
+                throw new ValidationException("Orders not found", 404);
+            }
+
+            $response = new OrdersGetAllResponse();
+            $response->orders = $orders;
+
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+    }
+    
+    public function getAllOrdersByAccountId(OrdersGetAllRequest $request): OrdersGetAllResponse
+    {
+        $this->validateGetAllOrdersByAccountId($request);
+        try {
+            $orders = $this->ordersRepo->findAll($request->account_id);
             if ($orders == null) {
                 throw new ValidationException("Orders not found", 404);
             }
@@ -97,6 +116,14 @@ class OrdersService
         }
     }
 
+    public function validateGetAllOrdersByAccountId(OrdersGetAllRequest $request)
+    {
+        if (
+            $request->account_id == null || trim($request->account_id) == ""
+        ) {
+            throw new ValidationException("account_id is required", 400);
+        }
+    }
 
     public function updateOrders(OrdersUpdateRequest $request): OrdersUpdateResponse
     {
