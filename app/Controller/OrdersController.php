@@ -121,4 +121,23 @@ class OrdersController
             ErrorHelper::errors($e);
         }
     }
+
+    public function remove(string $id)
+    {
+        try {
+            if (!isset($id)) throw new ValidationException("Id is required", 400);
+
+            $request = new OrdersGetByIdRequest();
+            $request->id = $id;
+            $this->ordersService->removeOrders($request);
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => 'OK'
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
+
 }

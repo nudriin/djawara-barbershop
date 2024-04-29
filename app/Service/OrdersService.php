@@ -136,5 +136,21 @@ class OrdersService
         }
     }
 
+    public function removeOrders(OrdersGetByIdRequest $request)
+    {
+        $this->validateGetSchedulesById($request);
+        try {
+            Database::beginTransaction();
+            $orders = $this->ordersRepo->findById($request->id);
+            if($orders == null) {
+                throw new ValidationException("Schedule not found", 404);
+            }
 
+            $this->ordersRepo->remove($orders->id);
+            Database::commitTransaction();
+        } catch (ValidationException $e) {
+            Database::rollbackTransaction();
+            throw $e;
+        }
+    }
 }

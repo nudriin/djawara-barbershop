@@ -61,7 +61,7 @@ Router::add("POST", "/api/v1/orders", OrdersController::class, "add");
 Router::add("GET", "/api/v1/orders/([0-9]+)", OrdersController::class, "getById");
 Router::add("GET", "/api/v1/orders", OrdersController::class, "getAll");
 Router::add("PATCH", "/api/v1/orders/([0-9]+)", OrdersController::class, "update", [AuthAdminMiddleware::class]);
-Router::add("DELETE", "/api/v1/orders/([0-9]+)", OrdersController::class, "update", [AuthAdminMiddleware::class]);
+Router::add("DELETE", "/api/v1/orders/([0-9]+)", OrdersController::class, "remove", [AuthAdminMiddleware::class]);
 // ! ===========
 Router::run();
 
