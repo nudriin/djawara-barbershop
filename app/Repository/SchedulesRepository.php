@@ -64,7 +64,7 @@ class SchedulesRepository
 
     public function remove(string $id) 
     {
-        $stmt = $this->connection->prepare("DELETE FROM schedules WHERE id = ?");
+        $stmt = $this->connection->prepare("CALL deleteSchedules(?)");
         $stmt->execute([$id]);
     }
 }
