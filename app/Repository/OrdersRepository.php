@@ -15,7 +15,7 @@ class OrdersRepository
 
     public function save(Orders $orders): Orders
     {
-        $stmt = $this->connection->prepare("INSERT INTO orders(account_id, total_price, schedule_id, status) VALUES (?, ?, ?)");
+        $stmt = $this->connection->prepare("INSERT INTO orders(account_id, total_price, schedule_id) VALUES (?, ?, ?)");
         $stmt->execute([$orders->account_id, $orders->total_price, $orders->schedule_id]);
 
         return $orders;
