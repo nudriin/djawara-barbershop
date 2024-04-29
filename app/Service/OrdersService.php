@@ -1,4 +1,5 @@
 <?php
+
 namespace Nurdin\Djawara\Service;
 
 use Nurdin\Djawara\Config\Database;
@@ -29,7 +30,6 @@ class OrdersService
             Database::beginTransaction();
             $orders = new Orders();
             $orders->account_id = $request->account_id;
-            $orders->total_price = $request->total_price;
             $orders->schedule_id = $request->schedule_id;
 
             $this->ordersRepo->save($orders);
@@ -48,8 +48,8 @@ class OrdersService
     public function validateAddOrders(OrdersAddRequest $request)
     {
         if (
-            $request->account_id == null || $request->total_price == null || $request->schedule_id == null ||
-            trim($request->account_id) == "" || trim($request->total_price) == "" || trim($request->schedule_id) == ""
+            $request->account_id == null || $request->schedule_id == null ||
+            trim($request->account_id) == "" || trim($request->schedule_id) == ""
         ) {
             throw new ValidationException("account_id, total_price and schedule_id is required", 400);
         }
@@ -98,21 +98,21 @@ class OrdersService
     }
 
 
-    public function updateOrders(OrdersUpdateRequest $request) : OrdersUpdateResponse
+    public function updateOrders(OrdersUpdateRequest $request): OrdersUpdateResponse
     {
         $this->validateUpdateOrders($request);
         try {
             Database::beginTransaction();
             $orders = $this->ordersRepo->findById($request->id);
 
-            if($orders == null) {
+            if ($orders == null) {
                 throw new ValidationException("Orders not found", 404);
             }
 
-            if(isset($request->account_id) && $request->account_id) $orders->account_id = $request->account_id;
-            if(isset($request->total_price) && $request->total_price) $orders->total_price = $request->total_price;
-            if(isset($request->schedule_id) && $request->schedule_id) $orders->schedule_id = $request->schedule_id;
-            if(isset($request->status) && $request->status) $orders->status = $request->status;
+            if (isset($request->account_id) && $request->account_id) $orders->account_id = $request->account_id;
+            if (isset($request->total_price) && $request->total_price) $orders->total_price = $request->total_price;
+            if (isset($request->schedule_id) && $request->schedule_id) $orders->schedule_id = $request->schedule_id;
+            if (isset($request->status) && $request->status) $orders->status = $request->status;
 
             $this->ordersRepo->update($orders);
             Database::commitTransaction();
@@ -142,7 +142,7 @@ class OrdersService
         try {
             Database::beginTransaction();
             $orders = $this->ordersRepo->findById($request->id);
-            if($orders == null) {
+            if ($orders == null) {
                 throw new ValidationException("Schedule not found", 404);
             }
 
