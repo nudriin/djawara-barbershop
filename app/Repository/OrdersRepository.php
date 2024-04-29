@@ -56,7 +56,7 @@ class OrdersRepository
 
     public function update(Orders $orders) : Orders
     {
-        $stmt = $this->connection->prepare("UPDATE orders SET account_id = ?, total_price = ?, status = ?, schedule_id = ?, WHERE id = ?");
+        $stmt = $this->connection->prepare("UPDATE orders SET account_id = ?, total_price = ?, status = ?, schedule_id = ? WHERE id = ?");
         $stmt->execute([$orders->account_id, $orders->total_price, $orders->status, $orders->schedule_id, $orders->id]);
 
         return $orders;

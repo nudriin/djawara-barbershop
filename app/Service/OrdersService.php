@@ -6,20 +6,22 @@ use Nurdin\Djawara\Domain\Orders;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Orders\OrdersAddRequest;
 use Nurdin\Djawara\Model\Orders\OrdersAddResponse;
+use Nurdin\Djawara\Model\Orders\OrdersUpdateRequest;
+use Nurdin\Djawara\Model\Orders\OrdersUpdateResponse;
 use Nurdin\Djawara\Repository\OrdersRepository;
 
 class OrdersService
 {
-    private OrdersRepository $orderRepo;
+    private OrdersRepository $ordersRepo;
 
-    public function __construct(OrdersRepository $orderRepo)
+    public function __construct(OrdersRepository $ordersRepo)
     {
-        $this->orderRepo = $orderRepo;
+        $this->ordersRepo = $ordersRepo;
     }
 
     public function addOrders(OrdersAddRequest $request): OrdersAddResponse
     {
-        $this->validateAddKapsters($request);
+        $this->validateAddOrders($request);
         try {
             Database::beginTransaction();
             $orders = new Orders();
@@ -27,7 +29,7 @@ class OrdersService
             $orders->total_price = $request->total_price;
             $orders->schedule_id = $request->schedule_id;
 
-            $this->orderRepo->save($orders);
+            $this->ordersRepo->save($orders);
             Database::commitTransaction();
 
             $response = new OrdersAddResponse();
@@ -40,7 +42,7 @@ class OrdersService
         }
     }
 
-    public function validateAddKapsters(OrdersAddRequest $request)
+    public function validateAddOrders(OrdersAddRequest $request)
     {
         if (
             $request->account_id == null || $request->total_price == null || $request->schedule_id == null ||
@@ -49,4 +51,44 @@ class OrdersService
             throw new ValidationException("account_id, total_price and schedule_id is required", 400);
         }
     }
+
+    public function updateOrders(OrdersUpdateRequest $request) : OrdersUpdateResponse
+    {
+        $this->validateUpdateOrders($request);
+        try {
+            Database::beginTransaction();
+            $orders = $this->ordersRepo->findById($request->id);
+
+            if($orders == null) {
+                throw new ValidationException("Orders not found", 404);
+            }
+
+            if(isset($request->account_id) && $request->account_id) $orders->account_id = $request->account_id;
+            if(isset($request->total_price) && $request->total_price) $orders->total_price = $request->total_price;
+            if(isset($request->schedule_id) && $request->schedule_id) $orders->schedule_id = $request->schedule_id;
+            if(isset($request->status) && $request->status) $orders->status = $request->status;
+
+            $this->ordersRepo->update($orders);
+            Database::commitTransaction();
+
+            $response = new OrdersUpdateResponse();
+            $response->orders = $orders;
+
+            return $response;
+        } catch (ValidationException $e) {
+            Database::rollbackTransaction();
+            throw $e;
+        }
+    }
+
+    public function validateUpdateOrders(OrdersUpdateRequest $request)
+    {
+        if (
+            $request->id == null || trim($request->id) == ""
+        ) {
+            throw new ValidationException("id is required", 400);
+        }
+    }
+
+
 }

@@ -108,9 +108,9 @@ class KapstersService
                 throw new ValidationException("Kapsters not found", 404);
             }
 
-            if (isset($request->name) && $kapsters->name != null) $kapsters->name = $request->name;
-            if (isset($request->phone) && $kapsters->phone != null) $kapsters->phone = $request->phone;
-            if (isset($request->profile_pic) && $kapsters->profile_pic != null) $kapsters->profile_pic = $request->profile_pic;
+            if (isset($request->name) && $request->name != null) $kapsters->name = $request->name;
+            if (isset($request->phone) && $request->phone != null) $kapsters->phone = $request->phone;
+            if (isset($request->profile_pic) && $request->profile_pic != null) $kapsters->profile_pic = $request->profile_pic;
 
             $this->kapstersRepo->update($kapsters);
             Database::commitTransaction();
