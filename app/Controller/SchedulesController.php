@@ -88,7 +88,7 @@ class SchedulesController
 
             http_response_code(200);
             echo json_encode([
-                'data' => $schedules
+                'data' => $schedules->schedules
             ]);
         } catch (Exception $e) {
             ErrorHelper::errors($e);

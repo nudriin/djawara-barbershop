@@ -51,6 +51,20 @@ class OrdersController
         }
     }
 
+    public function getAll()
+    {
+        try {
+            $orders = $this->ordersService->getAllOrders();
+
+            http_response_code(200);
+            echo json_encode([
+                'data' => $orders->orders
+            ]);
+        } catch (Exception $e) {
+            ErrorHelper::errors($e);
+        }
+    }
+
     public function update(string $id)
     {
         try {
@@ -69,11 +83,6 @@ class OrdersController
             http_response_code(200);
             echo json_encode([
                 'data' => [
-                    // 'id' => $orders->orders->id,
-                    // 'account_id' => $orders->orders->account_id,
-                    // 'total_price' => $orders->orders->total_price,
-                    // 'schedule_id' => $orders->orders->schedule_id,
-                    // 'status' => $orders->orders->status
                     'id' => $orders->orders->id,
                     'account_id' => $orders->orders->account_id,
                     'total_price' => $orders->orders->total_price,

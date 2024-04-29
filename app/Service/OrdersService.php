@@ -6,6 +6,7 @@ use Nurdin\Djawara\Domain\Orders;
 use Nurdin\Djawara\Exception\ValidationException;
 use Nurdin\Djawara\Model\Orders\OrdersAddRequest;
 use Nurdin\Djawara\Model\Orders\OrdersAddResponse;
+use Nurdin\Djawara\Model\Orders\OrdersGetAllResponse;
 use Nurdin\Djawara\Model\Orders\OrdersUpdateRequest;
 use Nurdin\Djawara\Model\Orders\OrdersUpdateResponse;
 use Nurdin\Djawara\Repository\OrdersRepository;
@@ -51,6 +52,24 @@ class OrdersService
             throw new ValidationException("account_id, total_price and schedule_id is required", 400);
         }
     }
+
+    public function getAllOrders(): OrdersGetAllResponse
+    {
+        try {
+            $orders = $this->ordersRepo->findAll();
+            if ($orders == null) {
+                throw new ValidationException("Orders not found", 404);
+            }
+
+            $response = new OrdersGetAllResponse();
+            $response->orders = $orders;
+
+            return $response;
+        } catch (ValidationException $e) {
+            throw $e;
+        }
+    }
+
 
     public function updateOrders(OrdersUpdateRequest $request) : OrdersUpdateResponse
     {
