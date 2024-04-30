@@ -105,8 +105,7 @@ class OrdersController
                 'data' => $orders->orders
             ]);
         } catch (Exception $e) {
-            echo $e;
-            // ErrorHelper::errors($e);
+            ErrorHelper::errors($e);
         }
     }
 
