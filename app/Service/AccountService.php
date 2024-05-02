@@ -99,7 +99,14 @@ class AccountService
                 $expired_time = time() + (60 * 60);
 
                 $payload = [
+                    'id' => $account->id,
                     'username' => $account->username,
+                    'email' => $account->email,
+                    'name' => $account->name,
+                    'phone' => $account->phone,
+                    'role' => $account->role,
+                    'address' => $account->address,
+                    'profile_pic' => $account->profile_pic,
                     'exp' => $expired_time // token 1 jam
                 ];
 

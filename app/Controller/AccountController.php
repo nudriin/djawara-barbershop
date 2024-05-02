@@ -137,7 +137,7 @@ class AccountController
             $token = $this->accountService->login($loginRequest);
 
             http_response_code(200);
-            header("Set-Cookie: user_id=" . $loginRequest->username . "; expires=" . (time() + (86400 * 30)) . "; path=/");
+            header("Set-Cookie: token=" . $token->token . "; expires=" . gmdate('D, d M Y H:i:s \G\M\T', time() + 3600) . "; path=/");
             echo json_encode([
                 'data' => [
                     'token' => $token->token
