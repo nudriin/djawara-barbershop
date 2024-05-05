@@ -63,7 +63,7 @@ class KapstersRepository
 
     public function remove(string $id) 
     {
-        $stmt = $this->connection->prepare("DELETE FROM kapsters WHERE id = ?");
+        $stmt = $this->connection->prepare("CALL delete_kapster(?)");
         $stmt->execute([$id]);
     }
 }

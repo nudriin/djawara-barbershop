@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 04, 2024 at 11:13 PM
+-- Generation Time: May 05, 2024 at 11:14 PM
 -- Server version: 8.1.0
 -- PHP Version: 8.2.4
 
@@ -34,6 +34,12 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteSchedules` (`sch_id` INT)   BEGIN 
 	DELETE FROM orders WHERE schedule_id = sch_id;
 	DELETE FROM schedules WHERE id = sch_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_kapster` (`kap_id` INT)   BEGIN 
+    DELETE FROM orders WHERE schedule_id IN (SELECT id FROM schedules WHERE kapster_id = kap_id);
+	DELETE FROM schedules WHERE kapster_id = kap_id;
+	DELETE FROM kapsters WHERE id = kap_id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOrders` (`acc_id` INT, `sch_id` INT)   BEGIN
@@ -101,18 +107,18 @@ INSERT INTO `categories` (`id`, `name`, `price`) VALUES
 -- (See below for the actual view)
 --
 CREATE TABLE `getallorders` (
-`account_email` varchar(255)
+`id` int
 ,`account_id` int
-,`account_name` varchar(255)
-,`account_phone` varchar(255)
-,`category_name` varchar(255)
-,`id` int
-,`kapster_name` varchar(255)
-,`order_date` timestamp
-,`schedule_date` varchar(21)
 ,`schedule_id` int
+,`order_date` timestamp
 ,`status` enum('PENDING','CONFIRMED','COMPLETED','CANCELED')
+,`account_name` varchar(255)
+,`account_email` varchar(255)
+,`account_phone` varchar(255)
+,`kapster_name` varchar(255)
+,`category_name` varchar(255)
 ,`total_price` int
+,`schedule_date` varchar(21)
 );
 
 -- --------------------------------------------------------
@@ -122,14 +128,14 @@ CREATE TABLE `getallorders` (
 -- (See below for the actual view)
 --
 CREATE TABLE `getallschedules` (
-`category_id` int
+`schedule_id` int
+,`kapster_id` int
+,`category_id` int
+,`kapster_name` varchar(255)
 ,`category_name` varchar(255)
 ,`category_price` int
-,`dates` date
-,`kapster_id` int
-,`kapster_name` varchar(255)
-,`schedule_id` int
 ,`status` enum('AVAILABLE','BOOKED')
+,`dates` date
 ,`times` time
 );
 
@@ -152,7 +158,6 @@ CREATE TABLE `kapsters` (
 
 INSERT INTO `kapsters` (`id`, `name`, `phone`, `profile_pic`) VALUES
 (10, 'Nurdin', '081549193834', 'https://kfbgqdcxemiokdktlykv.supabase.co/storage/v1/object/public/nudriin/1713953096973Screenshot_20220213-125905944-01-01.jpeg'),
-(11, 'Miau', '12', 'https://kfbgqdcxemiokdktlykv.supabase.co/storage/v1/object/public/nudriin/1713973725911yes.jpeg'),
 (12, 'Extheriouz', '1151', 'https://kfbgqdcxemiokdktlykv.supabase.co/storage/v1/object/public/nudriin/1713980066045IMG_3519-01_1.jpeg'),
 (13, 'Zin', '081549193834', 'https://kfbgqdcxemiokdktlykv.supabase.co/storage/v1/object/public/nudriin/1714321658067Remini20220616115908963.jpg');
 
@@ -176,8 +181,6 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `account_id`, `order_date`, `status`, `schedule_id`, `total_price`) VALUES
-(19, 2, '2024-04-30 18:41:26', 'COMPLETED', 15, 25000),
-(20, 2, '2024-04-30 18:41:29', 'CANCELED', 13, 120000),
 (21, 2, '2024-04-30 18:41:34', 'CONFIRMED', 10, 120000),
 (22, 2, '2024-04-30 18:43:42', 'PENDING', 14, 20000);
 
@@ -215,12 +218,9 @@ CREATE TABLE `schedules` (
 INSERT INTO `schedules` (`id`, `kapster_id`, `category_id`, `status`, `dates`, `times`) VALUES
 (10, 10, 11, 'BOOKED', '2024-04-27', '20:00:00'),
 (11, 12, 12, 'AVAILABLE', '2024-04-27', '20:00:00'),
-(13, 11, 11, 'BOOKED', '2024-05-09', '01:40:00'),
 (14, 13, 12, 'BOOKED', '2024-05-01', '18:40:00'),
-(15, 11, 13, 'BOOKED', '2024-05-23', '18:45:00'),
 (16, 10, 11, 'AVAILABLE', '2024-05-03', '06:30:00'),
-(17, 13, 13, 'AVAILABLE', '2024-05-01', '17:30:00'),
-(18, 11, 12, 'AVAILABLE', '2024-05-10', '17:30:00');
+(17, 13, 13, 'AVAILABLE', '2024-05-01', '17:30:00');
 
 -- --------------------------------------------------------
 
