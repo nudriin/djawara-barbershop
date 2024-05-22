@@ -44,6 +44,7 @@ class SchedulesController
             http_response_code(200);
             echo json_encode([
                 'data' => [
+                    'id' => $schedules->schedules->id,
                     'kapster_id' => $schedules->schedules->kapster_id,
                     'category_id' => $schedules->schedules->category_id,
                     'dates' => $schedules->schedules->dates,

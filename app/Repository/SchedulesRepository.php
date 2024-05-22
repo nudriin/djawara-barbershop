@@ -18,6 +18,7 @@ class SchedulesRepository
     {
         $stmt = $this->connection->prepare("INSERT INTO schedules(kapster_id, category_id, dates, times, status) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$schedules->kapster_id, $schedules->category_id, $schedules->dates, $schedules->times, $schedules->status]);
+        $schedules->id = $this->connection->lastInsertId();
 
         return $schedules;
     }

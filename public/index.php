@@ -49,7 +49,7 @@ Router::add("DELETE", "/api/v1/categories/([0-9]+)", CategoriesController::class
 // ! ===========
 
 // ! SCHEDULES ROUTES
-Router::add("POST", "/api/v1/schedules", SchedulesController::class, "add", [AuthAdminMiddleware::class]);
+Router::add("POST", "/api/v1/schedules", SchedulesController::class, "add");
 Router::add("GET", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "getById");
 Router::add("GET", "/api/v1/schedules", SchedulesController::class, "getAll");
 Router::add("PATCH", "/api/v1/schedules/([0-9]+)", SchedulesController::class, "update", [AuthAdminMiddleware::class]);

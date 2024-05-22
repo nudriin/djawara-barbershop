@@ -35,11 +35,11 @@ class SchedulesService
             $schedules->times = $request->times;
             $schedules->status = "AVAILABLE";
 
-            $this->schedulesRepo->save($schedules);
+            $insertedSchedules = $this->schedulesRepo->save($schedules);
             Database::commitTransaction();
 
             $response = new SchedulesAddResponse();
-            $response->schedules = $schedules;
+            $response->schedules = $insertedSchedules;
 
             return $response;
         } catch (ValidationException $e) {
